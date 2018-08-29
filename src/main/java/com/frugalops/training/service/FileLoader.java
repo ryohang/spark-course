@@ -1,4 +1,4 @@
-package com.frugalops.training.service.mapre;
+package com.frugalops.training.service;
 
 
 import com.google.common.collect.Iterators;

@@ -1,3 +1,4 @@
 .idea/
 sparkdemo.iml
 target/
+.DS_Store

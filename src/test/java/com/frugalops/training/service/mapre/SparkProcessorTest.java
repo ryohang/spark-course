@@ -1,4 +1,5 @@
-package com.frugalops.training.service;
+package com.frugalops.training.service.mapre;
+
 
 import com.frugalops.training.Application;
 import com.frugalops.training.service.FileLoader;
@@ -21,9 +22,12 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @AutoConfigureMockMvc
-public class FileLoadTest {
+public class SparkProcessorTest {
     @Autowired
     private FileLoader fileLoader;
+
+    @Autowired
+    private SparkProcessor sparkProcessor;
     private URL btcCSV;
 
     @Before
@@ -35,6 +39,7 @@ public class FileLoadTest {
     public void loadFromCSVTest() throws IOException {
         File csv = new File(btcCSV.getPath());
         Dataset<Row> df = fileLoader.loadFromCSV(csv);
-        assertTrue(df.count()>100);
+        Double totalBlocks = sparkProcessor.aggregateBlocks(df.toJavaRDD());
+        assertTrue(totalBlocks>0);
     }
 }
