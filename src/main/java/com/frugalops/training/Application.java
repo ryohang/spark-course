@@ -4,6 +4,7 @@ import com.frugalops.training.service.FileLoader;
 import com.frugalops.training.service.mapre.SparkProcessor;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +26,8 @@ public class Application {
         Double blockSizeCount  = context.getBean(SparkProcessor.class).aggregateBlocks(dataset.toJavaRDD());
         Logger logger = LoggerFactory.getLogger(SparkProcessor.class);
         logger.info("total generate block size: "+blockSizeCount);
+        Dataset<Row> reduced = context.getBean(SparkProcessor.class).mapByDate(dataset,context.getBean(SparkSession.class));
+        reduced.show();
     }
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {

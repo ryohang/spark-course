@@ -5,6 +5,7 @@ import com.frugalops.training.Application;
 import com.frugalops.training.service.FileLoader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,8 @@ public class SparkProcessorTest {
 
     @Autowired
     private SparkProcessor sparkProcessor;
+    @Autowired
+    private SparkSession sparkSession;
     private URL btcCSV;
 
     @Before
@@ -36,10 +39,18 @@ public class SparkProcessorTest {
     }
 
     @Test
-    public void loadFromCSVTest() throws IOException {
+    public void aggregateBlocksTest() throws IOException {
         File csv = new File(btcCSV.getPath());
         Dataset<Row> df = fileLoader.loadFromCSV(csv);
         Double totalBlocks = sparkProcessor.aggregateBlocks(df.toJavaRDD());
         assertTrue(totalBlocks>0);
+    }
+
+    @Test
+    public void mapByDateTest() throws IOException {
+        File csv = new File(btcCSV.getPath());
+        Dataset<Row> df = fileLoader.loadFromCSV(csv);
+        Dataset<Row> dataset = sparkProcessor.mapByDate(df,sparkSession);
+        assertTrue(df.count()>dataset.count());
     }
 }
