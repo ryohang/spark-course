@@ -1,6 +1,7 @@
 package com.frugalops.training.config;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.sql.SparkSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,4 +19,15 @@ public class SparkConfig {
                 .set("spark.sql.shuffle.partitions","100");
         return conf;
     }
+    @Bean
+    public SparkSession getSparkSession(){
+        SparkSession sparkSession = SparkSession
+                .builder()
+                .appName("SparkWithSpring")
+                .master("local")
+                .getOrCreate();
+        System.out.println("Spark Version: " + sparkSession.version());
+        return sparkSession;
+    }
+
 }
