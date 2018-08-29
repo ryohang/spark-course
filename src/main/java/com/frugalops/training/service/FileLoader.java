@@ -1,33 +1,33 @@
 package com.frugalops.training.service;
 
 
-import com.google.common.collect.Iterators;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.StructType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Service
 public class FileLoader {
     @Autowired
     protected SparkSession sparkSession;
+    @Value("${processor.input}")
+    private String inputFilePath;
+
+    public Dataset<Row> loadFile() {
+        return loadFromCSV(new File(inputFilePath));
+    }
     /**
      *
      * @param file
      * @return
      * @throws IOException
      */
-    public Dataset<Row> loadFromCSV(File file) throws IOException {
+    public Dataset<Row> loadFromCSV(File file) {
 //        StructType schema = new StructType()
 //                .add("date", "date")
 //                .add("txcount", "int")
