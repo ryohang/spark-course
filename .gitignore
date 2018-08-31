@@ -2,3 +2,6 @@
 sparkdemo.iml
 target/
 .DS_Store
+
+.venv
+spark-warehouse
